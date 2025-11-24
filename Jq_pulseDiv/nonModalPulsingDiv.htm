@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+
+<!---- JQuery core below ---->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<!--- jquery UI below --->
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.3/jquery-ui.min.js"></script> 
+
+<!--- include the pulsate JS file ---->
+<script src="JQ_pulseDiv.js"></script>
+
+
+<style>
+.bodyFont{
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#36F;	
+}
+
+.triggerFont{
+	cursor:pointer;
+	color:#39C;
+	
+}
+
+</style>
+
+<body class="bodyFont">
+<br />
+<br />
+
+
+
+
+<!--- some osr tof trigger to open the div  in the open call, pass these things in this order
+1. the ID of the outermost holding div (string)
+2. the ID of the div inside of that that holds the HTML conent and fades in as the outer div is pulsing (string)
+3. the final height of the outer div when its done appering (numeric)
+4. the final width of the outer div when its done appearing (numeric)
+--->
+<span id="pulsatingDivTriggerClick" onclick="wbiDivPulsateOpen('divPulsateOuter','divPulsateContent',600,800)" class="triggerFont"> OPEN PULSATING DIV (600px X 800px)</span>
+<br />
+<br />
+<span id="pulsatingDivTriggerClick" onclick="wbiDivPulsateOpen('divPulsateOuter','divPulsateContent',400,400)" class="triggerFont"> OPEN PULSATING DIV (400px X 400px)</span>
+
+
+
+
+<!---- outer most div, style it howerver you want - it should start off as display: none ----->
+<div id="divPulsateOuter" style="position:absolute; left: 0px, top: 0px; border: 1px solid #cccccc; width:5px; height:5px; background-color:#ffffff;border-radius: 5px;; box-shadow: 10px 10px 12px #cccccc; z-index: 10000; opacity:0">
+
+<!--- div that holds the X button to close it out ---->
+<div id="spanOuterXButton" style="float:right; cursor:pointer; position: absolute; top: -10px; right: -10px; opacity: 0" onclick="bounceOutDiv('divPulsateOuter','divPulsateContent')">
+<img src="divCloseSVG.svg" />
+</div>
+<br />
+<br />
+
+<!---- main content div. stick the conent in here as inner HTML, can be statis, populated  by a function or by an AJAX call  ---->
+<div id="divPulsateContent" align="center" style="position:absolute; width:100%; height:100px; background-color:#ffffff; opacity:0">
+<br />
+<br />
+<br />
+<br /><br />HERE IS  A BUNCH OF HTML
+<br /><br />HERE IS  A BUNCH OF HTML
+<br /><br />HERE IS  A BUNCH OF HTML
+<br /><br />HERE IS  A BUNCH OF HTML
+<br /><br />
+<br />
+<br />
+<br />
+<br />
+
+<span onclick="bounceOutDiv('divPulsateOuter','divPulsateContent')" style="cursor:pointer">CLOSE THIS DIV</span> <!---- close button if you want one ----->
+</div><!--- end content div ----->
+</div><!---- end outermost div ---->
+</body>
+</html>
