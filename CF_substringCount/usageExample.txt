@@ -1,0 +1,31 @@
+the only required attributes are the larger string (sMainString) and the substring being searched for (sSubString).
+
+
+<!---- count the ocurrences ------ count the ocurrences -------- count the ocurrences -------- count the ocurrences -------- count the ocurrences -------- count the ocurrences ------>
+<cfinvoke component="substringCounter" returnvariable="howManyTimes" method="countSubString">
+<cfinvokeargument name="sMainString" value="#myLargerString#">
+<cfinvokeargument name="sSubString" value="#mySubString#">
+</cfinvoke>
+
+
+<cfoutput>
+the substring was found #howManyTimes# times.
+</cfoutput>
+
+
+
+
+<!--- this version of the call  would return a list that is delimited by a pipe (|). The first member of the list is the count of occurrences, the second is the position of the final occurrence.--->
+<!---- count the ocurrences and return the last position ------ count the ocurrences and return the last position -------- count the ocurrences and return the last position ------>
+<cfinvoke component="substringCounter" returnvariable="howManyTimes" method="countSubString">
+<cfinvokeargument name="sMainString" value="I like to move it, move it. I like to move it, move it. We like to move it.">
+<cfinvokeargument name="sSubString" value="move it">
+<cfinvokeargument name="bBindLastPositionFound" value="1">
+</cfinvoke>
+
+
+
+<cfset thisArray  = listToArray(howManyTimes,"|")>
+<cfoutput>
+the substring was found #thisArray[1]# times and the last occurrence was found at position #thisArray[2]#
+</cfoutput>
