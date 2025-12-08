@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Six Digit Input Form</title>
+</head>
+
+
+<style>
+.EmpButton{
+	border: 1px solid #999999;
+	border-radius: 3px;
+	color: #999;
+	padding: 6px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:14px;
+	cursor: pointer;
+	background-color:#FFF;
+	outline: none;
+}
+.EmpButton:hover{
+	color: #0060DF;
+	border: 1px solid #0060DF;	
+	outline: none;
+}
+
+.readyToSubmit{
+	color: #0060DF;
+	border: 1px solid #0060DF;
+	border-radius: 3px;
+	padding: 6px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:14px;
+	cursor: pointer;
+	background-color:#FFF;
+	outline: none;
+}
+
+
+/* class for the digit boxes */
+.inputText{
+	border: 1px solid #999999; 
+	border-radius: 3px; 
+	font-family:Verdana, Geneva, sans-serif; 
+	font-size: 12px; 
+	color:#666;
+	height:20px;
+	outline: none;
+}
+
+.inputText:focus{
+	border: 1px solid #0060DF; 
+	border-radius: 3px; 
+	font-family:Verdana, Geneva, sans-serif; 
+	font-size: 12px; 
+	color:#666;	
+	outline: none;
+}
+
+
+/* class for the area above the digit boxes */
+.styTopParagraph{
+	margin:auto;
+	font-family:Verdana, Geneva, sans-serif;
+	color:#0060DF;
+	font-size: 12px;
+		
+}
+
+/* style for teh expiration block */
+.styExpirationBlock{
+	margin:auto;
+	font-family:Verdana, Geneva, sans-serif;
+	color:#0060DF;
+	font-size: 12px;
+	
+}
+
+.OTPPageRed{
+	color:#C00;
+	font-size: 12px;
+	
+}
+</style>
+
+
+
+<!---- JQuery core below ---->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<!--- jquery UI below, including CSS --->
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.3/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.3/jquery-ui.min.js"></script> 
+
+<script language="javascript" type="text/javascript">
+
+
+
+
+function moveToNextDigit(thisNextDigit){
+	//alert(thisNextDigit);
+	$("#" + thisNextDigit).focus();
+	
+		if (thisNextDigit == 'btnSendCode'){
+		//alert("i should move to the submit button");	
+		// switch the class of the button to active
+		$("#btnSendCode").toggleClass("readyToSubmit");
+		$("#btnSendCode").focus();
+		
+	}
+	
+}
+
+
+function doSubmitCode(){
+	var isReady = 1;
+		if ($("#digit6").val().length < 1){
+		isReady = 0;
+		$("#digit6").focus();
+		}
+		if ($("#digit5").val().length < 1){
+		isReady = 0;
+		$("#digit5").focus();
+		}
+		if ($("#digit4").val().length < 1){
+		isReady = 0;
+		$("#digit4").focus();
+		}
+		if ($("#digit3").val().length < 1){
+		isReady = 0;
+		$("#digit3").focus();
+		}
+		if ($("#digit2").val().length < 1){
+		isReady = 0;
+		$("#digit2").focus();
+		}
+		if ($("#digit1").val().length < 1){
+		isReady = 0;
+		$("#digit1").focus();
+		}
+	
+	if (isReady == 1){
+		// concatenate the main OTP code to get ready to send 
+		var thisTotalCode = $("#digit1").val() + $("#digit2").val() + $("#digit3").val() + $("#digit4").val() + $("#digit5").val() + $("#digit6").val();
+		$("#hdnOTPCode").val(thisTotalCode);
+		$("#frmSendOTP").submit();		
+	}
+	
+}
+
+
+
+<!--- js for the countdown timer --->
+
+// set the flag below to use a clock to shuit down the boxes or not. 1 turns it on, 0 turns it off
+var doUseClock = 1;
+
+
+var timerMinutes = 1.5; /// set the number of minutes for the timer 
+var diffMins = (60 * timerMinutes) ;// 60 seconds times the timeout set in the variable
+
+
+
+function updateTimer(){
+	if(doUseClock == 1){
+	
+	var thisMinutes = Math.floor(diffMins/60);
+	var thisSeconds = Math.floor(diffMins - (thisMinutes * 60));
+	
+	var thisRemainingTime = "This code will expire in ";
+	
+	if (thisMinutes > 0){
+	thisRemainingTime = thisRemainingTime + "<span class='OTPPageRed'>" + thisMinutes + "</span> minutes and ";
+	}
+	
+	thisRemainingTime = thisRemainingTime + "<span class='OTPPageRed'>" + thisSeconds + "</span> seconds";
+	
+	diffMins = diffMins - 1;
+	$("#spanCountdown").html(thisRemainingTime);
+	const thisTimer = setTimeout(updateTimer,1000);
+	
+		if (diffMins <= -1){
+		clearTimeout(thisTimer);
+		wbiTriggerExpiration();
+		}
+	}
+}
+
+function wbiTriggerExpiration(){
+	// lock down the digits fields
+	$("#digit1").attr("readonly", "readonly");
+	$("#digit1").val("");
+	$("#digit1").css("background-color","#cccccc");
+	
+	$("#digit2").attr("readonly", "readonly");
+	$("#digit2").val("");
+	$("#digit2").css("background-color","#cccccc");
+	
+	$("#digit3").attr("readonly", "readonly");
+	$("#digit3").val("");
+	$("#digit3").css("background-color","#cccccc");
+	
+	$("#digit4").attr("readonly", "readonly");
+	$("#digit4").val("");
+	$("#digit4").css("background-color","#cccccc");
+	
+	$("#digit5").attr("readonly", "readonly");
+	$("#digit5").val("");
+	$("#digit5").css("background-color","#cccccc");
+	
+	$("#digit6").attr("readonly", "readonly");
+	$("#digit6").val("");
+	$("#digit6").css("background-color","#cccccc");
+	
+	// ghost the button
+	$("#btnSendCode").css("background-color","#cccccc");
+	$("#btnSendCode").val("passcode has expired");
+	
+	// update the span
+	$("#divCountdown").css("color","#cc3300");
+	var thisNewSpanContent = "The Passcode has expired.<br> Use the link below to return to the login page to create a new passcode";
+	$("#divCountdown").html(thisNewSpanContent);
+	
+}
+
+</script>
+
+<body class="mainBodyText" onload="updateTimer()">
+
+
+<br />
+<br />
+<br />
+<br />
+
+
+<div id="divTopParagraph" class="styTopParagraph" align="center">
+<br />
+<br />
+<br />
+
+Here is some verbiage for the top paragraph, instructions, etc...
+<br />
+<br />
+<br />
+<br />
+
+
+</div>
+
+
+
+
+
+<!---- setup the 6 square input fields for user entry ---->
+<div id="divSixDigitContainer" style="border: 1px solid #cccccc; width:500px; margin-left:auto; margin-right:auto; border-radius: 5px; padding: 20px" align="center">
+
+<input name="digit1" type="text" id="digit1" style="border: 1px solid #cccccc; padding:2px; font-size:48px; border-radius:5px; height:80px; width:40px; text-align:center; " maxlength="1" width="1" align="middle" onkeyup="moveToNextDigit('digit2')" autofocus />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input name="digit2" type="text" id="digit2" style="border: 1px solid #cccccc; padding:2px; font-size:48px; border-radius:5px; height:80px; width:40px; text-align:center" maxlength="1" width="1" align="middle" onkeyup="moveToNextDigit('digit3')" />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input name="digit3" type="text" id="digit3" style="border: 1px solid #cccccc; padding:2px; font-size:48px; border-radius:5px; height:80px; width:40px; text-align:center" maxlength="1" width="1" align="middle" onkeyup="moveToNextDigit('digit4')" />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input name="digit4" type="text" id="digit4" style="border: 1px solid #cccccc; padding:2px; font-size:48px; border-radius:5px; height:80px; width:40px; text-align:center" maxlength="1" width="1" align="middle" onkeyup="moveToNextDigit('digit5')" />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input name="digit5" type="text" id="digit5" style="border: 1px solid #cccccc; padding:2px; font-size:48px; border-radius:5px; height:80px; width:40px; text-align:center" maxlength="1" width="1" align="middle" onkeyup="moveToNextDigit('digit6')" />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input name="digit6" type="text" id="digit6" style="border: 1px solid #cccccc; padding:2px; font-size:48px; border-radius:5px; height:80px; width:40px; text-align:center" maxlength="1" width="1" align="middle" onkeyup="moveToNextDigit('btnSendCode')" />
+<br />
+<br />
+
+<input id="btnSendCode" type="button" class="EmpButton" value="VALIDATE PASSCODE" onclick="doSubmitCode()" />
+</div>
+
+<!--- buildout the form with invisible elements ---->
+<form id="frmSendOTP" name="frmSendOTP" action="pageThatValidatesTheCode.htm" method="get">
+<input type="hidden" id="hdnOTPCode" name="hdnOTPCode" value="" />
+<input type="hidden" id="hdnOTPID" name="hdnOTPID" value="insert Code or ID here" />
+</form>
+
+
+
+<br />
+<br />
+<br />
+
+<!---- below is the div for the countdown, if that has been turned on in the beginning of the JS section using the variable "doUseClock" ---->
+<div id="divCountdown" style=" width:500px; margin-left:auto; margin-right:auto; padding: 20px; font-size:12px" align="center" class="styExpirationBlock">
+<span id="spanCountdown"></span>
+<br />
+<br />
+<br />
+</div>
+
+
+
+
+
+</body>
+</html>
